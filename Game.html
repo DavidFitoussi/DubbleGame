@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="../js/jquery-3.4.1.min.js"></script>
+    <meta charset="UTF-8">
+    <title>Dobble game</title>
+    <table  width="100%"><tr >
+        <td width="30%"></td>
+        <td align="center">
+            <table width="300px">
+                <tr><td colspan="2" style="direction:rtl">
+                    <button id="btnGetCard">Get Card</button>
+                </td></tr>
+                <tr><td  style="color:blue;"> <label id="lblCard1Values"></label></td></tr>
+                <tr><td  style="color:blue;"> <label id="lblCard2Values"></label></td></tr>
+            </table>
+        </td>
+        <td width="30%">
+    </tr></table>
+
+</head>
+<body>
+
+</body>
+</html>
+    <script type="text/javascript" >
+    var Card1 = '';
+    var Card2 = '';
+    $( "#btnGetCard" ).click(function() {
+      Card1 = GetCardValue();
+      Card2 = GetCardValue();
+      $("#lblCard1Values").html(Card1);
+      $("#lblCard2Values").html(Card2);
+    });
+    function GetCardValue() {
+      var result= '';
+      $.ajax(
+                {
+                url: "http://localhost:5000/GetCard",
+                type:"GET",
+                success: function(response){
+                    alert(response);
+                    result = response ;
+                },
+                  error: function (xhr, ajaxOptions, thrownError) {
+                    alert(xhr.status);
+                    alert(thrownError);
+                  }});
+                return result ;
+    }
+</script>
