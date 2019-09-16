@@ -1,21 +1,65 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <style>
+        .borderSelected { border-width: 2px; border-color: blue; border-style: solid; }
+
+    </style>
     <script src="../js/jquery-3.4.1.min.js"></script>
     <meta charset="UTF-8">
     <title>Dobble game</title>
-    <table  width="100%"><tr >
-        <td width="30%"></td>
-        <td align="center">
-            <table width="300px">
-                <tr><td colspan="2" style="direction:rtl">
-                    <button id="btnGetCard">Get Card</button>
-                </td></tr>
-                <tr><td  style="color:blue;"> <label id="lblCard1Values"></label></td></tr>
-                <tr><td  style="color:blue;"> <label id="lblCard2Values"></label></td></tr>
-            </table>
-        </td>
-        <td width="30%">
+    <H1 align="center">Welcome to Python Dobble game </H1>
+    <table  width="100%">
+        <tr>
+            <td style="direction:rtl">
+                <img  src="./images/Gamedobble.jpg" style="width:200px;height:200px;" align="middle"></img></td>
+            </td>
+        </tr>
+        <tr>
+            <td style="direction:rtl">
+            <button id="btnGetCard">Get Cards</button>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <table>
+                    <tr><td colspan="3"><h2>Player 1</h2></td></tr>
+                    <tr>
+                        <td><img id="img1_1" src="./images/Gamedobble.jpg" style="width:100px;height:100px;"></img></td>
+                        <td><img id="img1_2" src="./images/Gamedobble.jpg" style="width:100px;height:100px;"></img></td>
+                        <td><img id="img1_3" src="./images/Gamedobble.jpg" style="width:100px;height:100px;"></img></td>
+                    </tr>
+                    <tr>
+                        <td><img id="img1_4" src="./images/Gamedobble.jpg" style="width:100px;height:100px;"></img></td>
+                        <td><img id="img1_5" src="./images/Gamedobble.jpg" style="width:100px;height:100px;"></img></td>
+                        <td><img id="img1_6" src="./images/Gamedobble.jpg" style="width:100px;height:100px;"></img></td>
+                    </tr>
+                    <tr>
+                        <td><img id="img1_7" src="./images/Gamedobble.jpg" style="width:100px;height:100px;"></img></td>
+                        <td><img id="img1_8" src="./images/Gamedobble.jpg" style="width:100px;height:100px;"></img></td>
+                    </tr>
+                </table>
+            </td>
+            <td>
+                <table>
+                    <tr><td colspan="3"><h2>Player 2</h2></td></tr>
+                    <tr>
+                        <td><img id="img2_1" src="./images/Gamedobble.jpg" style="width:100px;height:100px;"></img></td>
+                        <td><img id="img2_2" src="./images/Gamedobble.jpg" style="width:100px;height:100px;"></img></td>
+                        <td><img id="img2_3" src="./images/Gamedobble.jpg" style="width:100px;height:100px;"></img></td>
+                    </tr>
+                    <tr>
+                        <td><img id="img2_4" src="./images/Gamedobble.jpg" style="width:100px;height:100px;"></img></td>
+                        <td><img id="img2_5" src="./images/Gamedobble.jpg" style="width:100px;height:100px;"></img></td>
+                        <td><img id="img2_6" src="./images/Gamedobble.jpg" style="width:100px;height:100px;"></img></td>
+                    </tr>
+                    <tr>
+                        <td><img id="img2_7" src="./images/Gamedobble.jpg" style="width:100px;height:100px;"></img></td>
+                        <td><img id="img2_8" src="./images/Gamedobble.jpg" style="width:100px;height:100px;"></img></td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
     </tr></table>
 
 </head>
@@ -24,28 +68,35 @@
 </body>
 </html>
     <script type="text/javascript" >
-    var Card1 = '';
-    var Card2 = '';
     $( "#btnGetCard" ).click(function() {
-      Card1 = GetCardValue();
-      Card2 = GetCardValue();
-      $("#lblCard1Values").html(Card1);
-      $("#lblCard2Values").html(Card2);
+      GetCardValue(1);
+      GetCardValue(2);
     });
-    function GetCardValue() {
+    function imagewasclicked(img) {
+        var src =  $(img);
+        src.addClass("borderSelected");
+        //alert(src[0].id);
+    }
+    function GetCardValue(player) {
       var result= '';
       $.ajax(
                 {
                 url: "http://localhost:5000/GetCard",
                 type:"GET",
+                  dataType:"json",
                 success: function(response){
-                    alert(response);
-                    result = response ;
+                    console.log(response) ;
+                    for ( i= 1 ; i < response.length ; i++ ){
+                        for ( j= 1 ; j < response.length ; j++ ){
+                            $("#img" + player + "_" +i).attr("src","./images/" + response[i]+ ".jpg");
+                            $("#img" + player + "_" +i).attr("onclick","imagewasclicked('#img" + player + "_" +i +"')");
+                            $("#img" + player + "_" +i).removeClass("borderSelected");
+                            }
+                    }
                 },
                   error: function (xhr, ajaxOptions, thrownError) {
                     alert(xhr.status);
                     alert(thrownError);
                   }});
-                return result ;
     }
 </script>
